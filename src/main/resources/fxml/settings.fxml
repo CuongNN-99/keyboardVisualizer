@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.keyboarddisplay.controller.SettingsController"
+      spacing="15" styleClass="settings-pane"
+      prefWidth="450" style="-fx-background-color: #2D2D2D;"> <padding>
+    <Insets top="20" right="20" bottom="20" left="20"/>
+</padding>
+
+    <Label text="Keyboard Display Settings" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <Separator/>
+
+    <VBox spacing="5">
+        <Label text="Keyboard Layout:" style="-fx-text-fill: #AAAAAA;"/>
+        <ComboBox fx:id="layoutComboBox" maxWidth="Infinity" promptText="Select Layout"/>
+    </VBox>
+
+    <HBox spacing="15">
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <Label text="Highlight Color:" style="-fx-text-fill: #AAAAAA;"/>
+            <ColorPicker fx:id="highlightColorPicker" maxWidth="Infinity"/>
+        </VBox>
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <Label text="Background Color:" style="-fx-text-fill: #AAAAAA;"/>
+            <ColorPicker fx:id="backgroundColorPicker" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="10">
+        <VBox spacing="5">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Key Highlight Opacity:" style="-fx-text-fill: #AAAAAA;"/>
+                <Label fx:id="opacityLabel" text="100%" style="-fx-text-fill: #00ADB5;"/>
+            </HBox>
+            <Slider fx:id="opacitySlider" min="0" max="100" value="100"
+                    showTickLabels="false" showTickMarks="true"/>
+        </VBox>
+
+        <VBox spacing="5">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Background Opacity:" style="-fx-text-fill: #AAAAAA;"/>
+                <Label fx:id="backgroundOpacityLabel" text="30%" style="-fx-text-fill: #00ADB5;"/>
+            </HBox>
+            <Slider fx:id="backgroundOpacitySlider" min="0" max="100" value="30"
+                    showTickLabels="false" showTickMarks="true"/>
+        </VBox>
+    </VBox>
+
+    <VBox spacing="5">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Animation Duration:" style="-fx-text-fill: #AAAAAA;"/>
+            <Label fx:id="animationDurationLabel" text="200 ms" style="-fx-text-fill: #00ADB5;"/>
+        </HBox>
+        <Slider fx:id="animationDurationSlider" min="0" max="1000" value="200"
+                showTickLabels="false" showTickMarks="true"/>
+    </VBox>
+
+    <Separator/>
+
+    <VBox spacing="10">
+        <Label text="Window Behavior:" style="-fx-text-fill: #AAAAAA;"/>
+        <HBox spacing="20">
+            <CheckBox fx:id="alwaysOnTopCheckBox" text="Always on Top" style="-fx-text-fill: white;"/>
+            <CheckBox fx:id="clickThroughCheckBox" text="Click Through" style="-fx-text-fill: white;"/>
+        </HBox>
+    </VBox>
+
+    <Separator/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelButton" text="Cancel" prefWidth="80"/>
+        <Button fx:id="saveButton" text="Save" prefWidth="80" defaultButton="true"
+                style="-fx-background-color: #00ADB5; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>
