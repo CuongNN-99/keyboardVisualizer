@@ -1,20 +1,23 @@
 package com.keyboarddisplay.model;
 
 import javafx.scene.paint.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Model class for application settings
- * Contains all configurable parameters for the Keyboard Display application
+ * Model class for application settings.
+ * Contains all configurable parameters for the Keyboard Display application.
  */
 public class AppSettings {
+    private static final Logger logger = LoggerFactory.getLogger(AppSettings.class);
 
     // --- Color settings ---
-    private String highlightColor = "#FF0000"; // Màu phím khi nhấn
-    private String backgroundColor = "#1E1E1E"; // Màu nền của toàn bộ bảng phím
+    private String highlightColor = "#00BFFF"; // Đổi sang DeepSkyBlue cho hiện đại
+    private String backgroundColor = "#1E1E1E";
 
     // --- Opacity settings ---
-    private double opacity = 1.0;            // Độ rõ của phím (0.0 to 1.0)
-    private double backgroundOpacity = 0.3;  // Độ rõ của nền (0.0 to 1.0)
+    private double opacity = 1.0;
+    private double backgroundOpacity = 0.3;
 
     // --- Animation settings ---
     private int animationDuration = 200;
@@ -23,12 +26,16 @@ public class AppSettings {
     private KeyboardLayoutType layoutType = KeyboardLayoutType.FULL_87;
 
     // --- Window Behavior settings ---
-    private boolean alwaysOnTop = true;      // MỚI: Luôn hiển thị trên các cửa sổ khác
-    private boolean clickThrough = false;    // MỚI: Cho phép click chuột xuyên qua bàn phím
+    private boolean alwaysOnTop = true;
+    private boolean clickThrough = false;
 
     private boolean showOnlySelected = false;
     private String[] selectedKeys = {};
 
+    /**
+     * Enum cho các kiểu Layout.
+     * Lưu ý: Tùy chọn CUSTOM sẽ bị lọc bỏ ở UI trong SettingsController.
+     */
     public enum KeyboardLayoutType {
         FULL_87("Full 87 Keys"),
         WASD("WASD Only"),
@@ -56,6 +63,7 @@ public class AppSettings {
         try {
             return Color.web(highlightColor);
         } catch (IllegalArgumentException e) {
+            logger.warn("Invalid highlight color: {}, defaulting to RED", highlightColor);
             return Color.RED;
         }
     }
@@ -76,9 +84,10 @@ public class AppSettings {
     }
 
     public KeyboardLayoutType getLayoutType() { return layoutType; }
-    public void setLayoutType(KeyboardLayoutType layoutType) { this.layoutType = layoutType; }
+    public void setLayoutType(KeyboardLayoutType layoutType) {
+        this.layoutType = (layoutType != null) ? layoutType : KeyboardLayoutType.FULL_87;
+    }
 
-    // --- MỚI: Getters/Setters cho Always on Top & Click Through ---
     public boolean isAlwaysOnTop() { return alwaysOnTop; }
     public void setAlwaysOnTop(boolean alwaysOnTop) { this.alwaysOnTop = alwaysOnTop; }
 
@@ -90,26 +99,26 @@ public class AppSettings {
 
     public String[] getSelectedKeys() { return selectedKeys; }
     public void setSelectedKeys(String[] selectedKeys) {
-        this.selectedKeys = selectedKeys != null ? selectedKeys : new String[0];
+        this.selectedKeys = (selectedKeys != null) ? selectedKeys : new String[0];
     }
 
     // ==================== Utility Methods ====================
 
     public boolean validate() {
-        if (opacity < 0.0 || opacity > 1.0) return false;
-        if (backgroundOpacity < 0.0 || backgroundOpacity > 1.0) return false;
-        if (animationDuration < 50 || animationDuration > 1000) return false;
         try {
+            if (opacity < 0.0 || opacity > 1.0) return false;
+            if (backgroundOpacity < 0.0 || backgroundOpacity > 1.0) return false;
+            if (animationDuration < 50 || animationDuration > 1000) return false;
             Color.web(highlightColor);
             Color.web(backgroundColor);
-        } catch (IllegalArgumentException e) {
+            return layoutType != null;
+        } catch (Exception e) {
             return false;
         }
-        return layoutType != null;
     }
 
     public void resetToDefaults() {
-        this.highlightColor = "#FF0000";
+        this.highlightColor = "#00BFFF";
         this.backgroundColor = "#1E1E1E";
         this.opacity = 1.0;
         this.backgroundOpacity = 0.3;
@@ -132,7 +141,7 @@ public class AppSettings {
         copy.alwaysOnTop = this.alwaysOnTop;
         copy.clickThrough = this.clickThrough;
         copy.showOnlySelected = this.showOnlySelected;
-        copy.selectedKeys = this.selectedKeys.clone();
+        copy.selectedKeys = (this.selectedKeys != null) ? this.selectedKeys.clone() : new String[0];
         return copy;
     }
 }

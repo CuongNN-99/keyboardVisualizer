@@ -12,46 +12,51 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.keyboarddisplay.controller.MainController"
            styleClass="root-pane"
-           prefWidth="800" prefHeight="320">
+           prefWidth="950" prefHeight="380"
+           stylesheets="@../css/style.css"
+           pickOnBounds="false">
 
-    <VBox spacing="0" style="-fx-background-color: transparent;">
+    <VBox spacing="0" style="-fx-background-color: transparent;" pickOnBounds="false">
         <HBox fx:id="topBar" spacing="10" alignment="CENTER_LEFT" styleClass="control-bar"
-              minHeight="-Infinity" prefHeight="40" maxHeight="40">
+              minHeight="42" prefHeight="42" maxHeight="42"
+              pickOnBounds="true">
             <padding>
                 <Insets top="0" bottom="0" left="15" right="15"/>
             </padding>
 
-            <Label fx:id="statusLabel" text="Layout: Loading..." styleClass="status-label"
-                   minWidth="180" maxWidth="450" HBox.hgrow="ALWAYS" />
+            <Label text="⠿" style="-fx-text-fill: rgba(255,255,255,0.2); -fx-font-size: 16px; -fx-padding: 0 5 0 0;" mouseTransparent="true"/>
 
-            <Region HBox.hgrow="ALWAYS" fx:id="topBarSpacer" minWidth="10" />
+            <Label fx:id="statusLabel" text="Keyboard Display" styleClass="status-label"
+                   minWidth="180" maxWidth="450" HBox.hgrow="ALWAYS" mouseTransparent="true"/>
 
-            <HBox fx:id="buttonContainer" spacing="10" alignment="CENTER_RIGHT" minWidth="-Infinity">
+            <Region HBox.hgrow="ALWAYS" fx:id="topBarSpacer" minWidth="10" mouseTransparent="true" />
+
+            <HBox fx:id="buttonContainer" spacing="8" alignment="CENTER_RIGHT" minWidth="-Infinity">
                 <Button fx:id="minimizeButton" text="—" styleClass="settings-button" focusTraversable="false"/>
                 <Button fx:id="settingsButton" text="⚙" styleClass="settings-button" focusTraversable="false"/>
                 <Button fx:id="closeButton" text="✕" styleClass="close-button" focusTraversable="false"/>
             </HBox>
         </HBox>
 
-        <StackPane fx:id="keyboardContainer" VBox.vgrow="ALWAYS" alignment="CENTER">
+        <StackPane fx:id="keyboardContainer" VBox.vgrow="ALWAYS" alignment="CENTER"
+                   styleClass="keyboard-container" pickOnBounds="false">
             <padding>
-                <Insets top="0" bottom="0" left="15" right="15"/>
+                <Insets top="10" bottom="10" left="15" right="15"/>
             </padding>
-
-            <StackPane fx:id="keyboardGroup" alignment="CENTER">
-            </StackPane>
+            <StackPane fx:id="keyboardGroup" alignment="CENTER" pickOnBounds="false" />
         </StackPane>
 
-        <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="25" styleClass="footer">
-            <Label text="Press any key to see it highlighted" styleClass="footer-label"
-                   opacity="0.6" style="-fx-font-size: 10px;"/>
+        <HBox alignment="CENTER" minHeight="25" prefHeight="25" styleClass="footer" mouseTransparent="true">
+            <Label text="Press any key to see it highlighted" styleClass="footer-label" />
         </HBox>
     </VBox>
 
     <Region fx:id="resizeHandle"
             styleClass="resize-handle"
             StackPane.alignment="BOTTOM_RIGHT"
-            maxWidth="15" maxHeight="15">
+            maxWidth="20" maxHeight="20"
+            prefWidth="20" prefHeight="20"
+            pickOnBounds="true">
         <StackPane.margin>
             <Insets bottom="2" right="2"/>
         </StackPane.margin>

@@ -9,6 +9,10 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Controller cho hộp thoại Settings.
  * Quản lý tùy chọn người dùng và đồng bộ hóa với MainController.
@@ -41,7 +45,6 @@ public class SettingsController {
     @FXML
     public void initialize() {
         logger.debug("Initializing SettingsController");
-        // Lấy bản sao cài đặt hiện tại từ ConfigManager
         settings = ConfigManager.getInstance().getSettings();
 
         setupLayoutComboBox();
@@ -55,9 +58,24 @@ public class SettingsController {
         logger.debug("SettingsController initialized");
     }
 
+    /**
+     * Cập nhật: Lọc bỏ tùy chọn "Custom Selection" khỏi danh sách hiển thị
+     */
     private void setupLayoutComboBox() {
-        layoutComboBox.getItems().setAll(AppSettings.KeyboardLayoutType.values());
-        layoutComboBox.setValue(settings.getLayoutType());
+        // Lấy tất cả giá trị Enum và lọc bỏ tùy chọn CUSTOM / CUSTOM_SELECTION
+        List<AppSettings.KeyboardLayoutType> filteredLayouts = Arrays.stream(AppSettings.KeyboardLayoutType.values())
+                .filter(layout -> !layout.name().equalsIgnoreCase("CUSTOM")
+                        && !layout.name().equalsIgnoreCase("CUSTOM_SELECTION"))
+                .collect(Collectors.toList());
+
+        layoutComboBox.getItems().setAll(filteredLayouts);
+
+        // Nếu hiện tại đang là Custom (do file config cũ), mặc định chọn cái đầu tiên để tránh lỗi hiển thị
+        if (settings.getLayoutType().name().contains("CUSTOM")) {
+            layoutComboBox.setValue(filteredLayouts.get(0));
+        } else {
+            layoutComboBox.setValue(settings.getLayoutType());
+        }
     }
 
     private void setupColorPickers() {
@@ -108,38 +126,26 @@ public class SettingsController {
         cancelButton.setOnAction(event -> closeDialog());
     }
 
-    /**
-     * Gán tham chiếu của MainController để gọi hàm applySettings()
-     */
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
-    /**
-     * Thu thập dữ liệu từ UI, lưu vào model và yêu cầu MainController cập nhật.
-     */
     private void saveSettings() {
         logger.info("Applying and saving settings...");
         try {
-            // 1. Cập nhật Layout & Màu sắc
             settings.setLayoutType(layoutComboBox.getValue());
             settings.setHighlightColor(toHex(highlightColorPicker.getValue()));
             settings.setBackgroundColor(toHex(backgroundColorPicker.getValue()));
 
-            // 2. Cập nhật Độ mờ (Chuyển về hệ 0.0 - 1.0)
             settings.setOpacity(opacitySlider.getValue() / 100.0);
             settings.setBackgroundOpacity(backgroundOpacitySlider.getValue() / 100.0);
 
-            // 3. Cập nhật Animation & Window Behavior
             settings.setAnimationDuration((int) animationDurationSlider.getValue());
             settings.setAlwaysOnTop(alwaysOnTopCheckBox.isSelected());
             settings.setClickThrough(clickThroughCheckBox.isSelected());
 
-            // 4. Lưu vào file vật lý thông qua ConfigManager
             ConfigManager.getInstance().saveSettings();
 
-            // 5. Áp dụng trực tiếp lên giao diện chính
-            // Đảm bảo MainController có phương thức PUBLIC applySettings()
             if (mainController != null) {
                 mainController.applySettings();
             }

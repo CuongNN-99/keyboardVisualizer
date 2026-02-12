@@ -15,11 +15,13 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.keyboarddisplay.controller.SettingsController"
       spacing="15" styleClass="settings-pane"
-      prefWidth="450" style="-fx-background-color: #2D2D2D;"> <padding>
-    <Insets top="20" right="20" bottom="20" left="20"/>
-</padding>
+      prefWidth="450" style="-fx-background-color: #2D2D2D;">
 
-    <Label text="Keyboard Display Settings" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Keyboard Shadow Settings" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
 
     <Separator/>
 

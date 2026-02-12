@@ -5,74 +5,78 @@
 }
 
 .root-pane {
+    /* Thân app giữ độ mờ 0.9 để tập trung vào bàn phím */
     -fx-background-color: rgba(30, 30, 30, 0.9);
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-border-color: rgba(255, 255, 255, 0.15);
     -fx-border-width: 1.2;
-    /* Tăng độ bóng để cửa sổ nổi bật hơn trên nền desktop */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 15, 0, 0, 5);
 }
 
 /* --- 2. Main UI Components --- */
+
+/* TOP BAR: Xuyên thấu (Translucent) và Đậm màu */
 .control-bar {
-    -fx-background-color: rgba(45, 45, 45, 0.8);
+    /* RGBA với alpha 0.7 giúp nhìn xuyên thấu màn hình phía sau */
+    -fx-background-color: linear-gradient(to bottom, rgba(45, 45, 45, 0.75), rgba(30, 30, 30, 0.75));
     -fx-background-radius: 11 11 0 0;
-    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.1) transparent;
-    -fx-border-width: 0 0 1 0;
-    /* Đảm bảo chiều cao tối thiểu để không bị đè bẹp khi scale */
-    -fx-min-height: 38px;
+
+    /* Giữ viền dưới đậm để phân tách rõ ràng với khu vực bàn phím */
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.2) transparent;
+    -fx-border-width: 0 0 1.5 0;
+
+    -fx-min-height: 42px;
+    -fx-padding: 0 10 0 10;
+}
+
+/* Tăng nhẹ opacity khi hover để báo hiệu vùng chức năng */
+.control-bar:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(55, 55, 55, 0.85), rgba(40, 40, 40, 0.85));
 }
 
 .status-label {
-    -fx-text-fill: #00BFFF; /* Chuyển sang màu xanh dương nhạt để dễ đọc */
+    -fx-text-fill: #00BFFF;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-padding: 0 5 0 0;
 }
 
-/* Container chứa bàn phím: Cần một chút độ mờ để bàn phím nổi lên */
 .keyboard-container {
     -fx-background-color: rgba(0, 0, 0, 0.15);
     -fx-background-radius: 8;
-    /* Căn giữa nội dung scale */
-    -fx-alignment: top-center;
+    -fx-alignment: center;
 }
 
 /* --- 3. Buttons Style --- */
-.settings-button, .close-button {
+.settings-button, .close-button, .minimize-button {
     -fx-background-radius: 6;
     -fx-cursor: hand;
-    -fx-font-size: 11px;
-    -fx-min-width: 28;
-    -fx-min-height: 24;
-    -fx-transition: all 0.2s ease-in-out;
+    -fx-font-size: 12px;
+    -fx-min-width: 32;
+    -fx-min-height: 26;
+    /* Hiệu ứng chuyển màu mượt hơn */
+    -fx-transition-duration: 0.2s;
 }
 
 .settings-button {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-text-fill: #cccccc;
 }
 
 .settings-button:hover {
-    -fx-background-color: rgba(0, 191, 255, 0.3); /* Hover màu xanh highlight */
+    -fx-background-color: rgba(0, 191, 255, 0.4);
     -fx-text-fill: white;
 }
 
-.close-button {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
-    -fx-text-fill: #cccccc;
-}
-
 .close-button:hover {
-    -fx-background-color: #e81123; /* Màu đỏ Windows chuẩn */
+    -fx-background-color: rgba(232, 17, 35, 0.9);
     -fx-text-fill: white;
 }
 
 /* --- 4. Key Buttons --- */
 .key-button {
     -fx-background-radius: 6;
-    /* Tạo hiệu ứng chiều sâu cho phím */
     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 1);
 }
 
@@ -84,42 +88,40 @@
 
 /* --- 5. Resize Handle --- */
 .resize-handle {
-    -fx-background-color: rgba(0, 191, 255, 0.4); /* Sử dụng màu highlight */
-    -fx-shape: "M 10 10 L 10 0 L 8 0 L 8 8 L 0 8 L 0 10 Z";
-    -fx-cursor: nw-resize;
+    -fx-shape: "M 10 10 L 10 8 L 8 10 Z M 10 5 L 5 10 L 7 10 L 10 7 Z M 10 2 L 2 10 L 4 10 L 10 4 Z";
+    -fx-background-color: rgba(255, 255, 255, 0.35);
+    -fx-min-width: 14;
+    -fx-min-height: 14;
+    -fx-max-width: 14;
+    -fx-max-height: 14;
+    -fx-cursor: se-resize;
+    -fx-translate-x: -5;
+    -fx-translate-y: -5;
 }
 
 .resize-handle:hover {
-    -fx-background-color: rgba(0, 191, 255, 0.8);
+    -fx-background-color: #00BFFF;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 /* --- 6. Footer --- */
 .footer {
-    -fx-background-color: rgba(20, 20, 20, 0.4);
+    -fx-background-color: rgba(20, 20, 20, 0.5);
     -fx-background-radius: 0 0 12 12;
-    -fx-border-color: rgba(255, 255, 255, 0.05) transparent transparent transparent;
 }
 
 .footer-label {
-    -fx-text-fill: #888888;
+    -fx-text-fill: #666666;
     -fx-font-size: 10px;
-    -fx-font-style: italic;
 }
 
-/* --- 7. Form Controls (Cho Settings Window) --- */
+/* --- 7. Form Controls --- */
 .combo-box {
     -fx-background-color: #333333;
     -fx-background-radius: 4;
 }
 
-.combo-box .label {
-    -fx-text-fill: white;
-}
-
 .slider .thumb {
     -fx-background-color: #00BFFF;
-}
-
-.slider .track {
-    -fx-background-color: #444444;
 }

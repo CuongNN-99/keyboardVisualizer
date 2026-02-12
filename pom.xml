@@ -6,12 +6,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.keyboarddisplay</groupId>
-    <artifactId>keyboard-display</artifactId>
+    <artifactId>KeyboardShadow</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Keyboard Display</name>
-    <description>Real-time keyboard display application</description>
+    <name>KeyboardShadow</name>
+    <description>Real-time keyboard display application with Click-through support</description>
+    <developers>
+        <developer>
+            <name>NguyenNhatCuong</name>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,10 +24,12 @@
         <maven.compiler.target>17</maven.compiler.target>
         <javafx.version>21.0.1</javafx.version>
         <jnativehook.version>2.2.2</jnativehook.version>
+        <jna.version>5.14.0</jna.version>
+        <app.name>KeyboardShadow</app.name>
+        <app.vendor>NguyenNhatCuong</app.vendor>
     </properties>
 
     <dependencies>
-        <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -39,21 +46,29 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- JNativeHook for global keyboard hook -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.github.kwhat</groupId>
             <artifactId>jnativehook</artifactId>
             <version>${jnativehook.version}</version>
         </dependency>
 
-        <!-- JSON processing -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
 
-        <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -67,6 +82,13 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -75,6 +97,7 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
 
@@ -83,42 +106,31 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.keyboarddisplay.Main</mainClass>
-                    <options>
-                        <option>-Dfile.encoding=UTF-8</option>
-                    </options>
+                    <mainClass>com.keyboarddisplay.AppLauncher</mainClass>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>default-cli</id>
-                        <configuration>
-                            <mainClass>com.keyboarddisplay.Main</mainClass>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
-            <!-- Maven Assembly Plugin for creating distribution package -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.6.0</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/dist.xml</descriptor>
-                    </descriptors>
-                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/src/main/assembly/portable.xml</descriptor>
+                            </descriptors>
+                            <finalName>${app.name}-${project.version}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <!-- Maven Shade Plugin for creating executable JAR with dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -130,9 +142,11 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.keyboarddisplay.Main</mainClass>
+                                    <mainClass>com.keyboarddisplay.AppLauncher</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>

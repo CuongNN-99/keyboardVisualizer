@@ -1,13 +1,24 @@
-# Keyboard Display Runner Script
-# This script runs the application with JavaFX modules properly configured
+# KeyboardShadow Runner Script (PowerShell)
+# This script runs the application
 
 # Get the directory of this script
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-# Maven repository path
-$m2Repo = "$env:USERPROFILE\.m2\repository"
+# Check if running from installed directory or portable directory
+$jarPath = Join-Path $scriptDir "KeyboardShadow-1.0.0.jar"
 
-# JavaFX modules path (version 21.0.1)
+if (-not (Test-Path $jarPath)) {
+    $jarPath = "C:\Program Files\KeyboardShadow\KeyboardShadow-1.0.0.jar"
+}
+
+if (Test-Path $jarPath) {
+    Write-Host "Launching KeyboardShadow..." -ForegroundColor Green
+    java -jar "$jarPath"
+} else {
+    Write-Host "Error: KeyboardShadow JAR file not found!" -ForegroundColor Red
+    Write-Host "Searched in: $scriptDir" -ForegroundColor Yellow
+    Read-Host "Press Enter to exit"
+}
 $javafxVersion = "21.0.1"
 $javafxPath = "$m2Repo\org\openjfx"
 
